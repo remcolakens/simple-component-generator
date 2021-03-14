@@ -30,8 +30,15 @@ That's it! You've successfully installed the Simple Component Generator.
 Now all that's left is to create a new folder in your project like `@blueprint` and add all the files you need.
 As the name suggest, this folder will act as the blueprint for all of your generated components, the blueprint folder is **NOT** restricted to any file type.
 
-When creating the blueprint folder you'll have two new variables at your disposal: `FILENAME` && `COMPONENTTYPE`.
-These variables are case-sensitive and reserved names, under the hood the Simple Component Generator just replaces these names with the data you provide in the terminal.
+When creating the blueprint folder you'll have a couple of new variables at your disposal: 
+
+```
+PLACEHOLDER     // example: MyComponent
+FILENAME        // example: myComponent (camel-cased)  
+COMPONENTTYPE   // example: Atoms (based on Atomic Design )
+```
+
+These variables are all case-sensitive and reserved names, under the hood the Simple Component Generator just replaces these variables with the data you provide.
 
 Last but not least, it's highly recommended creating a new config file. In this file you can define the `component` and `blueprint` path so it will integrate in any front-end setup.
 The `withTypeDir` will be a boolean value to make paths like `./atoms/MyComponent`
