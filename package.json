@@ -1,6 +1,6 @@
 {
   "name": "@remcolakens/simple-component-generator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": false,
   "description": "Simple component generator that helps you to kickstart your new components",
   "bin": {

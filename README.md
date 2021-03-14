@@ -34,6 +34,7 @@ When creating the blueprint folder you'll have two new variables at your disposa
 These variables are case-sensitive and reserved names, under the hood the Simple Component Generator just replaces these names with the data you provide in the terminal.
 
 Last but not least, it's highly recommended creating a new config file. In this file you can define the `component` and `blueprint` path so it will integrate in any front-end setup.
+The `withTypeDir` will be a boolean value to make paths like `./atoms/MyComponent`
 
 In the root of your project create a new file with the name `.blueprint.json` using the following example and change the paths.
 
@@ -42,9 +43,12 @@ In the root of your project create a new file with the name `.blueprint.json` us
 ```json
 {
   "componentDir": "./components/",
-  "blueprintDir": "./blueprint/"
+  "blueprintDir": "./blueprint/",
+  "withTypeDir": true
 }
 ```
+
+
 
 ## How to Use
 

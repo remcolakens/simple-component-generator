@@ -4,7 +4,7 @@ const fs = require("fs-extra");
 const inquirer = require("inquirer");
 const replace = require("replace-in-file");
 
-let BLUEPRINT_DIR, COMPONENT_DIR;
+let BLUEPRINT_DIR, COMPONENT_DIR, WITH_COMPONENT_TYPE, TYPE_DIR;
 
 async function initGenerator() {
   fs.readJson(".blueprint.json")
@@ -14,6 +14,7 @@ async function initGenerator() {
       if (config.blueprintDir && config.componentDir) {
         BLUEPRINT_DIR = config.blueprintDir.replace(/\/$|$/, "/");
         COMPONENT_DIR = config.componentDir.replace(/\/$|$/, "/");
+        WITH_COMPONENT_TYPE = Boolean(config.withTypeDir);
 
         startInquirer();
       } else {
@@ -32,6 +33,7 @@ async function initGenerator() {
       );
       BLUEPRINT_DIR = "./blueprint".replace(/\/$|$/, "/");
       COMPONENT_DIR = "./components".replace(/\/$|$/, "/");
+      WITH_COMPONENT_TYPE = true;
 
       startInquirer();
     });
@@ -63,14 +65,16 @@ function startInquirer() {
     const name = answers["component-name"];
     const type = answers["component-type"];
 
-    if (!fs.existsSync(`${COMPONENT_DIR}/${type}/${name}`)) {
-      fs.mkdirSync(`${COMPONENT_DIR}/${type}/${name}`, { recursive: true });
+    TYPE_DIR = WITH_COMPONENT_TYPE ? `${type}/` : "";
+
+    if (!fs.existsSync(`${COMPONENT_DIR}${TYPE_DIR}${name}`)) {
+      fs.mkdirSync(`${COMPONENT_DIR}${TYPE_DIR}${name}`, { recursive: true });
 
       createComponent(name, type);
 
       console.log(
         "\x1b[36m%s\x1b[0m",
-        `Congratulations, your component has been generated in ${COMPONENT_DIR}${type}/${name}`
+        `Congratulations, your component has been generated in ${COMPONENT_DIR}${TYPE_DIR}${name}`
       );
     } else {
       console.error("\x1b[31m", "The directory already exist");
@@ -87,28 +91,28 @@ function createComponent(name, type) {
     if (file === "types.ts") {
       fs.copyFile(
         `${BLUEPRINT_DIR}${file}`,
-        `${COMPONENT_DIR}/${type}/${name}/${file}`,
+        `${COMPONENT_DIR}${TYPE_DIR}${name}/${file}`,
         (err) => {
           if (err) throw err;
         }
       );
 
       renameContent(
-        `${COMPONENT_DIR}/${type}/${name}/${file}`,
+        `${COMPONENT_DIR}${TYPE_DIR}${name}/${file}`,
         [/FILENAME/g],
         [capitalizeFirstLetter(name)]
       );
     } else {
       fs.copyFile(
         `${BLUEPRINT_DIR}${file}`,
-        `${COMPONENT_DIR}/${type}/${name}/${name}.${fileExtension}`,
+        `${COMPONENT_DIR}${TYPE_DIR}${name}/${name}.${fileExtension}`,
         (err) => {
           if (err) throw err;
         }
       );
 
       renameContent(
-        `${COMPONENT_DIR}/${type}/${name}/${name}.${fileExtension}`,
+        `${COMPONENT_DIR}${TYPE_DIR}${name}/${name}.${fileExtension}`,
         [/PLACEHOLDER/g, /FILENAME/g, /COMPONENTTYPE/g],
         [name, capitalizeFirstLetter(name), capitalizeFirstLetter(type)]
       );
@@ -138,7 +142,7 @@ async function getPackage() {
     const data = await fs.readJson("./package.json");
     console.log(`\n  Simple Component Generator ${data.version} \n`);
   } catch (err) {
-    console.error(err);
+    console.log(`\n Simple Component Generator \n`);
   }
 }
 
