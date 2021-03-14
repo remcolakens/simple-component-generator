@@ -3,6 +3,7 @@
 const fs = require("fs-extra");
 const inquirer = require("inquirer");
 const replace = require("replace-in-file");
+const pkgDir = require('pkg-dir');
 
 let BLUEPRINT_DIR, COMPONENT_DIR, WITH_COMPONENT_TYPE, TYPE_DIR;
 
@@ -25,14 +26,15 @@ async function initGenerator() {
       }
     })
     .catch(async () => {
-      await getPackage();
+      const rootDir = await pkgDir(__dirname);
+      await getPackage(rootDir);
 
       console.warn(
         "\x1b[31m",
         "\n WARNING: .blueprint not found, using default settings \n"
       );
-      BLUEPRINT_DIR = "./blueprint".replace(/\/$|$/, "/");
-      COMPONENT_DIR = "./components".replace(/\/$|$/, "/");
+      BLUEPRINT_DIR = `${rootDir}/blueprint`.replace(/\/$|$/, "/");
+      COMPONENT_DIR = `./components`.replace(/\/$|$/, "/");
       WITH_COMPONENT_TYPE = true;
 
       startInquirer();
@@ -137,9 +139,9 @@ function capitalizeFirstLetter(string) {
 }
 
 // read package.json
-async function getPackage() {
+async function getPackage(directory) {
   try {
-    const data = await fs.readJson("./package.json");
+    const data = await fs.readJson(`${directory}/package.json`);
     console.log(`\n  Simple Component Generator ${data.version} \n`);
   } catch (err) {
     console.log(`\n Simple Component Generator \n`);

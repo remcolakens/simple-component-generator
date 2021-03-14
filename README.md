@@ -17,10 +17,10 @@ This tool is built on top of Node, so you don't need to install much tooling. It
 
 ## Installation
 
-For the best experience install this package globally with `yarn` or `npm` by this running this command in your terminal:
+For the best experience install this package globally with `npm` by this running this command in your terminal:
 
 ```
-yarn global @remcolakens/simple-component-generator
+npm add -g @remcolakens/simple-component-generator
 ```
 
 That's it! You've successfully installed the Simple Component Generator.
